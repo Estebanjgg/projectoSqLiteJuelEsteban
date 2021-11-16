@@ -1,3 +1,46 @@
+
+-- 1. Tem alguns Clientes que são dependentes. Quero que vocês me digam de que clientes eles são dependentes.○ Por exemplo “Filho A” é dependente de qual outro cliente?
+
+
+
+SELECT id_cliente AS Cliente, id_conta AS Conta, dependente AS Dependente
+FROM cliente_conta
+WHERE (id_cliente IN (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35)
+AND dependente > 0)
+
+
+--2. Quais foram as 5 contas que:○ Mais fizeram transações○ Menos fizeram transações
+
+--la 5 cuentas que hicieron mas transacciones
+select 
+COUNT (id) ,id_cliente_conta ,MAX(id) 
+from transacao id
+group by id_cliente_conta
+order by id desc limit 5;
+
+
+--la cinco cuentas que hicieron menos transaccion
+
+select 
+COUNT(id),MIN(id),id_cliente_conta 
+from transacao id
+group by id_cliente_conta
+order by id desc limit 5;
+
+
+
+
+--3. Tivemos uma perda de dados e não sabemos qual é o saldo de cada conta, mas temos todas as transaçõesefetuadas.○ Queremos saber qual saldo total das contas registradas em banco! Reparem que temos alguns tipos de transações que subtraem dinheiro e outros que somam
+
+
+select cuenta.id as 'ID DE LOS CLIENTES', cuenta.numero AS 'NUMERO DE CUENTA DE LOS CLIENTES',  d.valor as 'VALOR REAL DE LAS CUENTAS'
+from conta cuenta
+join transacao d on cuenta.id = d.id_cliente_conta
+group by d.id_cliente_conta
+
+
+
+
 -- SQLite
 --DDL - Criando tabelas
 CREATE TABLE IF NOT EXISTS cliente (
@@ -46,6 +89,7 @@ CREATE TABLE IF NOT EXISTS transacao (
 
 
 --DML - Adicionando cargas iniciais
+--DML - Adicionando cargas iniciais
 INSERT INTO cliente (nome, cpf)
 VALUES 
 	('Alejandro Dario Centeno', '20806024941'),
@@ -84,6 +128,8 @@ VALUES
 	('Filho E', '96757832268'),
 	('Filho F', '82757766902')
     ;
+
+    -- Inserindo dados na tabela conta
 INSERT INTO conta (numero)
 VALUES
         ('1000001'),
@@ -116,6 +162,9 @@ VALUES
         ('1000028'),
         ('1000029'),
         ('1000030');
+
+
+        --Unindo dados da tabela cliente e da tabela conta 
 INSERT INTO cliente_conta 
 	(id_cliente, id_conta, dependente)
 VALUES
@@ -158,6 +207,8 @@ VALUES
         ('33', '21', true),
         ('34', '20', true),
         ('35', '13', true);
+
+        --Inserindo dados na tabela tipos de transação
 INSERT INTO tipo_transacao
 	(descricao)
 VALUES
@@ -165,6 +216,8 @@ VALUES
     ('saque'),
     ('pagar conta'),
     ('transferencia');
+
+    -- Inserindo dados na tabela transação
 INSERT INTO transacao
 	(id_tipo_transacao, id_cliente_conta, valor)
 VALUES
@@ -1094,4 +1147,8 @@ VALUES
         (3, 19, 725.14),
         (3, 10, 918.37),
         (1, 3, 863.53),
-        (2, 29, 291.42);
+        (2, 29, 291.42)
+
+
+
+ 
